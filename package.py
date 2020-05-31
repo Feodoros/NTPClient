@@ -31,9 +31,11 @@ class NTPPacket:
         # Time of sending answer from server (8 bytes)
         self.transmit = transmit
 
+    
     @staticmethod
     def get_fraction(number, precision):
         return int((number - int(number)) * 2 ** precision)
+
 
     # Pack message to send and receive
     def pack(self):
@@ -43,20 +45,20 @@ class NTPPacket:
                 self.stratum,
                 self.pool,
                 self.precision,
-                int(self.root_delay) + get_fraction(self.root_delay, 16),
+                int(self.root_delay) + self.get_fraction(self.root_delay, 16),
                 int(self.root_dispersion) + 
-                    get_fraction(self.root_dispersion, 16),
+                    self.get_fraction(self.root_dispersion, 16),
                 self.ref_id,
                 int(self.reference),
-                get_fraction(self.reference, 32),
+                self.get_fraction(self.reference, 32),
                 int(self.originate),
-                get_fraction(self.originate, 32),
+                self.get_fraction(self.originate, 32),
                 int(self.receive),
-                get_fraction(self.receive, 32),
+                self.get_fraction(self.receive, 32),
                 int(self.transmit),
-                get_fraction(self.transmit, 32))
-
+                self.get_fraction(self.transmit, 32))
         return package
+
 
     # Unpack message
     def unpack(self, data: bytes):
@@ -87,8 +89,8 @@ class NTPPacket:
         self.originate = unpacked_data[9] + unpacked_data[10] / 2 ** 32  # 8 bytes
         self.receive = unpacked_data[11] + unpacked_data[12] / 2 ** 32  # 8 bytes
         self.transmit = unpacked_data[13] + unpacked_data[14] / 2 ** 32  # 8 bytes
-
         return self
+
 
     # Pretty output 
     def display(self):
