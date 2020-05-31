@@ -58,3 +58,35 @@ class NTPPacket:
 
         return package
 
+    # Unpack message
+    def unpack(self, data: bytes):
+        unpacked_data = struct.unpack(NTPPacket._FORMAT, data)
+
+        self.leap_indicator = unpacked_data[0] >> 6  # 2 bits
+        self.version_number = unpacked_data[0] >> 3 & 0b111  # 3 bits
+        self.mode = unpacked_data[0] & 0b111  # 3 bits
+
+        self.stratum = unpacked_data[1]  # 1 byte
+        self.pool = unpacked_data[2]  # 1 byte
+        self.precision = unpacked_data[3]  # 1 byte
+
+        # 2 bytes | 2 bytes
+        self.root_delay = (unpacked_data[4] >> 16) + \
+            (unpacked_data[4] & 0xFFFF) / 2 ** 16
+         # 2 bytes | 2 bytes
+        self.root_dispersion = (unpacked_data[5] >> 16) + \
+            (unpacked_data[5] & 0xFFFF) / 2 ** 16 
+
+        # 4 bytes
+        self.ref_id = str((unpacked_data[6] >> 24) & 0xFF) + " " + \
+                      str((unpacked_data[6] >> 16) & 0xFF) + " " +  \
+                      str((unpacked_data[6] >> 8) & 0xFF) + " " +  \
+                      str(unpacked_data[6] & 0xFF)
+
+        self.reference = unpacked_data[7] + unpacked_data[8] / 2 ** 32  # 8 bytes
+        self.originate = unpacked_data[9] + unpacked_data[10] / 2 ** 32  # 8 bytes
+        self.receive = unpacked_data[11] + unpacked_data[12] / 2 ** 32  # 8 bytes
+        self.transmit = unpacked_data[13] + unpacked_data[14] / 2 ** 32  # 8 bytes
+
+        return self
+
