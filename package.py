@@ -1,3 +1,5 @@
+import struct 
+
 class NTPPacket:
     _FORMAT = "!B B b b 11I"
 
@@ -28,3 +30,31 @@ class NTPPacket:
         self.receive = 0
         # Time of sending answer from server (8 bytes)
         self.transmit = transmit
+
+    @staticmethod
+    def get_fraction(number, precision):
+        return int((number - int(number)) * 2 ** precision)
+
+    # Pack message to send and receive
+    def pack(self):
+        package = struct.pack(NTPPacket._FORMAT,
+                (self.leap_indicator << 6) + 
+                    (self.version_number << 3) + self.mode,
+                self.stratum,
+                self.pool,
+                self.precision,
+                int(self.root_delay) + get_fraction(self.root_delay, 16),
+                int(self.root_dispersion) + 
+                    get_fraction(self.root_dispersion, 16),
+                self.ref_id,
+                int(self.reference),
+                get_fraction(self.reference, 32),
+                int(self.originate),
+                get_fraction(self.originate, 32),
+                int(self.receive),
+                get_fraction(self.receive, 32),
+                int(self.transmit),
+                get_fraction(self.transmit, 32))
+
+        return package
+
