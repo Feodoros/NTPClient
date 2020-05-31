@@ -90,3 +90,19 @@ class NTPPacket:
 
         return self
 
+    # Pretty output 
+    def display(self):
+        return "Leap indicator: {0.leap_indicator}\n" \
+                "Version number: {0.version_number}\n" \
+                "Mode: {0.mode}\n" \
+                "Stratum: {0.stratum}\n" \
+                "Pool: {0.pool}\n" \
+                "Precision: {0.precision}\n" \
+                "Root delay: {0.root_delay}\n" \
+                "Root dispersion: {0.root_dispersion}\n" \
+                "Ref id: {0.ref_id}\n" \
+                "Reference: {0.reference}\n" \
+                "Originate: {0.originate}\n" \
+                "Receive: {0.receive}\n" \
+                "Transmit: {0.transmit}"\
+                .format(self)
