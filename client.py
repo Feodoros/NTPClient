@@ -32,7 +32,7 @@ class NTPClient:
         delta = self.calculate_delta(response.originate, response.transmit, response.receive,
                                      time_of_arrival)
 
-        return datetime.datetime.fromtimestamp(time.time() + delta).strftime("%c")
+        return datetime.datetime.fromtimestamp(time.time() + delta).strftime("%c"), response.display()
 
 
     @staticmethod
