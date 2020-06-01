@@ -1,5 +1,5 @@
 # NTPClient
-This is simple pure-python NTP Client. 
+This is simple **pure-python** NTP Client. 
 ## Usage
 `git clone https://github.com/Feodoros/NTPClient/`
 
